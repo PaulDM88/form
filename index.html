@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>TesisPro Ecuador · Cotizador</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <style>
+    :root{
+      --azul:#051e37;
+      --turquesa:#0097b2;
+      --naranja:#d0a554;
+      --naranjaClaro:#e2d2ab;
+      --bg:#f6f8fb;
+      --card:#ffffff;
+      --muted:#6c7a92;
+      --danger:#b00020;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Inter,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--azul);
+    }
+
+    /* CONTENEDOR PRINCIPAL */
+    .page{
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      padding:24px 12px;
+    }
+
+    .container{
+      width:100%;
+      max-width:980px;
+      background:var(--card);
+      border-radius:26px;
+      box-shadow:0 20px 45px rgba(5,30,55,.18);
+      padding:30px 24px;
+      border-top:6px solid var(--turquesa);
+    }
+
+    /* TITULO */
+    .title{
+      text-align:center;
+      margin-bottom:6px;
+      font-size:30px;
+      font-weight:900;
+      color:var(--azul);
+    }
+    .subtitle{
+      text-align:center;
+      font-size:14px;
+      color:var(--muted);
+      margin-bottom:26px;
+    }
+
+    /* SECCIONES */
+    .section-title{
+      font-size:14px;
+      margin:10px 0 10px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:var(--turquesa);
+      font-weight:800;
+    }
+
+    .card-section{
+      background:#ffffff;
+      border-radius:18px;
+      padding:16px 14px 12px;
+      border:1px solid #dde3f0;
+      margin-bottom:14px;
+      box-shadow:0 3px 12px rgba(0,0,0,.06);
+    }
+
+    /* GRID */
+    .row{display:flex;gap:12px;flex-wrap:wrap}
+    .col{flex:1 1 240px}
+
+    /* LABELS */
+    .label{
+      font-size:12px;
+      color:var(--azul);
+      margin-bottom:4px;
+      font-weight:700;
+      display:flex;
+      align-items:center;
+      gap:4px;
+    }
+    .label span.req{color:var(--danger);font-size:13px}
+
+    /* INPUTS */
+    input[type=text],
+    input[type=email],
+    input[type=tel],
+    input[type=date],
+    select,
+    textarea{
+      width:100%;
+      border-radius:12px;
+      border:1px solid #dfe3f3;
+      padding:10px 11px;
+      font-size:13px;
+      outline:none;
+      background:#ffffff;
+      transition:border .15s ease, box-shadow .15s ease, background .15s ease;
+    }
+    textarea{min-height:90px;resize:vertical}
+
+    input:focus,select:focus,textarea:focus{
+      border-color:var(--turquesa);
+      box-shadow:0 0 0 1px rgba(0,151,178,.35);
+    }
+
+    .hint{
+      font-size:11px;color:var(--muted);margin:3px 0 0;
+    }
+
+    /* EXTRAS */
+    .extras{
+      display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;
+    }
+    .extras label{
+      border-radius:999px;
+      border:1px solid var(--naranjaClaro);
+      padding:7px 11px;
+      font-size:12px;
+      cursor:pointer;
+      background:#fffaf1;
+      display:flex;align-items:center;gap:6px;
+      color:var(--azul);
+      transition:background .2s ease, border .2s ease, box-shadow .2s ease;
+    }
+    .extras label:hover{
+      background:var(--naranjaClaro);
+      border-color:var(--naranja);
+      color:var(--azul);
+      box-shadow:0 2px 8px rgba(0,0,0,.12);
+    }
+    .extras input[type=checkbox]{transform:scale(1.1)}
+
+    /* BOTÓN */
+    .cta{
+      display:flex;
+      justify-content:center;
+      margin-top:12px;
+    }
+
+    .btn{
+      appearance:none;
+      border:0;
+      border-radius:999px;
+      padding:13px 26px;
+      font-weight:900;
+      cursor:pointer;
+      font-size:14px;
+      transition:transform .12s ease, box-shadow .18s ease;
+      background:linear-gradient(135deg, var(--turquesa), var(--azul));
+      color:#ffffff;
+      letter-spacing:.05em;
+      display:flex;
+      gap:8px;
+      align-items:center;
+      box-shadow:0 8px 22px rgba(0,151,178,.35);
+    }
+    .btn:active{
+      transform:translateY(1px);
+      box-shadow:0 2px 8px rgba(0,0,0,.23);
+    }
+
+    .btn .icon{
+      width:20px;height:20px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:rgba(255,255,255,.18);
+      border-radius:50%;
+      font-size:12px;
+    }
+
+    /* FOOTER */
+    footer{
+      text-align:center;
+      margin-top:18px;
+      font-size:11px;
+      color:var(--muted);
+    }
+    footer span.brand{font-weight:700;color:var(--turquesa)}
+
+    /* TOAST */
+    .toast{
+      position:fixed;
+      left:50%;
+      transform:translateX(-50%);
+      bottom:18px;
+      background:var(--azul);
+      color:#fff;
+      padding:10px 14px;
+      border-radius:10px;
+      box-shadow:0 6px 20px rgba(0,0,0,.25);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .25s ease;
+      font-size:12px;
+      z-index:20;
+    }
+    .toast.show{opacity:1}
+
+    @media(max-width:600px){
+      .btn{width:100%;justify-content:center;}
+      .container{padding:20px 14px;}
+      .title{font-size:26px;}
+    }
+  </style>
+</head>
+
+<body>
+<div class="page">
+  <div class="container">
+    <!-- TITULO -->
+    <div class="title">TesisPro Ecuador – Cotizador</div>
+    <div class="subtitle">Completa este formulario y recibirás tu cotización personalizada por WhatsApp.</div>
+
+    <!-- FORMULARIO -->
+    <form id="cotizadorForm">
+
+      <!-- SERVICIO -->
+      <div class="section-title">1. Servicio que necesitas</div>
+      <div class="card-section">
+        <div class="row">
+          <div class="col">
+            <label class="label">Categoría de servicio <span class="req">*</span></label>
+            <select id="categoria" required>
+              <option value="">Selecciona una categoría</option>
+              <option>Titulación / Tesis</option>
+              <option>Examen complexivo</option>
+              <option>Académico (proyectos, trabajos, monografías)</option>
+              <option>Artículo científico / publicación</option>
+              <option>Código / programación</option>
+              <option>Otro</option>
+            </select>
+          </div>
+
+          <div class="col">
+            <label class="label">Servicio específico <span class="req">*</span></label>
+            <select id="servicio" required>
+              <option value="">Selecciona un servicio</option>
+              <option>Definición del tema</option>
+              <option>Anteproyecto</option>
+              <option>Tesis teórica</option>
+              <option>Tesis práctica</option>
+              <option>Capítulos de tesis</option>
+              <option>Monografía</option>
+              <option>Proyecto académico</option>
+              <option>Simulaciones / Diseños</option>
+              <option>Artículo científico</option>
+              <option>Corrección y normas</option>
+              <option>Revisión general</option>
+              <option>Otro</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px">
+          <div class="col">
+            <label class="label">Universidad / Institución <span class="req">*</span></label>
+            <input type="text" id="universidad" required>
+          </div>
+          <div class="col">
+            <label class="label">Carrera o área <span class="req">*</span></label>
+            <input type="text" id="carrera" required>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTACTO -->
+      <div class="section-title">2. Datos de contacto</div>
+      <div class="card-section">
+        <div class="row">
+          <div class="col">
+            <label class="label">Nombre completo <span class="req">*</span></label>
+            <input type="text" id="nombre" required>
+          </div>
+          <div class="col">
+            <label class="label">Correo electrónico</label>
+            <input type="email" id="email">
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px">
+          <div class="col">
+            <label class="label">Código de país</label>
+            <select id="codigoPais">
+              <option value="+593">+593 Ecuador</option>
+              <option value="+57">+57 Colombia</option>
+              <option value="+51">+51 Perú</option>
+              <option value="+502">+502 Guatemala</option>
+              <option value="+52">+52 México</option>
+              <option value="+34">+34 España</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+
+          <div class="col">
+            <label class="label">WhatsApp <span class="req">*</span></label>
+            <input type="tel" id="whatsappCliente" placeholder="Tu número" required>
+          </div>
+        </div>
+
+        <div style="margin-top:10px">
+          <label class="label">¿Cómo nos encontraste?</label>
+          <select id="medio">
+            <option value="">Selecciona una opción</option>
+            <option>Instagram</option>
+            <option>Facebook</option>
+            <option>TikTok</option>
+            <option>Recomendación</option>
+            <option>Google</option>
+            <option>Otro</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- PROYECTO -->
+      <div class="section-title">3. Detalles del proyecto</div>
+      <div class="card-section">
+        <div class="row">
+          <div class="col">
+            <label class="label">Tema del proyecto (opcional)</label>
+            <input type="text" id="tema">
+          </div>
+
+          <div class="col">
+            <label class="label">Fecha límite aproximada <span class="req">*</span></label>
+            <input type="date" id="fechaLimite" required>
+          </div>
+        </div>
+
+        <div style="margin-top:10px">
+          <label class="label">Descripción del proyecto <span class="req">*</span></label>
+          <textarea id="descripcion" required
+            placeholder="Indica qué necesitas, requisitos, normativa, modalidad, etc."></textarea>
+        </div>
+
+        <div style="margin-top:10px">
+          <label class="label">Opciones adicionales</label>
+          <div class="extras">
+            <label><input type="checkbox" id="extraAsesoria"> Asesoría</label>
+            <label><input type="checkbox" id="extraDiapositivas"> Diapositivas</label>
+            <label><input type="checkbox" id="extraAntiplagio"> Antiplagio</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTÓN -->
+      <div class="section-title">4. Envío</div>
+      <div class="card-section">
+        <p class="muted">Al enviar, se abrirá WhatsApp con tu solicitud lista.</p>
+
+        <div class="cta">
+          <button class="btn" type="submit">
+            <span class="icon">📲</span>
+            ENVIAR A WHATSAPP
+          </button>
+        </div>
+      </div>
+
+    </form>
+
+    <footer>
+      © <span id="year"></span> <span class="brand">TesisPro Ecuador</span>
+    </footer>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const WHATSAPP_NUMBER = "593994718790";
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const toastEl = document.getElementById('toast');
+  function showToast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    setTimeout(()=>toastEl.classList.remove('show'),2200);
+  }
+
+  function buildMessage(){
+    const categoria = document.getElementById('categoria').value;
+    const servicio = document.getElementById('servicio').value;
+    const universidad = document.getElementById('universidad').value.trim();
+    const carrera = document.getElementById('carrera').value.trim();
+
+    const nombre = document.getElementById('nombre').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const codigoPais = document.getElementById('codigoPais').value;
+    const whatsapp = document.getElementById('whatsappCliente').value.trim();
+    const medio = document.getElementById('medio').value;
+
+    const tema = document.getElementById('tema').value.trim();
+    const fechaLimite = document.getElementById('fechaLimite').value;
+    const descripcion = document.getElementById('descripcion').value.trim();
+
+    const extraA = document.getElementById('extraAsesoria').checked;
+    const extraD = document.getElementById('extraDiapositivas').checked;
+    const extraP = document.getElementById('extraAntiplagio').checked;
+
+    const extras = [];
+    if(extraA) extras.push("Asesoría");
+    if(extraD) extras.push("Diapositivas");
+    if(extraP) extras.push("Antiplagio");
+
+    let fechaTexto = fechaLimite;
+    if(fechaLimite){
+      const d = new Date(fechaLimite + "T00:00:00");
+      const dd = String(d.getDate()).padStart(2,"0");
+      const mm = String(d.getMonth()+1).padStart(2,"0");
+      const yyyy = d.getFullYear();
+      fechaTexto = `${dd}/${mm}/${yyyy}`;
+    }
+
+    const msg =
+`Hola TesisPro Ecuador 👋
+
+Quiero solicitar una cotización:
+
+Categoría: ${categoria}
+Servicio: ${servicio}
+
+Universidad: ${universidad}
+Carrera: ${carrera}
+
+Nombre: ${nombre}
+WhatsApp: ${codigoPais} ${whatsapp}
+Correo: ${email || "No indicado"}
+Cómo conocí TesisPro: ${medio || "No indicado"}
+
+Tema del proyecto: ${tema || "No especificado"}
+Fecha límite aproximada: ${fechaTexto}
+
+Descripción:
+${descripcion}
+
+Opciones adicionales:
+${extras.length ? extras.join(", ") : "Ninguna"}
+
+Entiendo que el valor no se muestra aquí y que recibiré la cotización por WhatsApp.
+`;
+
+    return msg;
+  }
+
+  document.getElementById('cotizadorForm').addEventListener('submit', function(e){
+    e.preventDefault();
+
+    const campos = [
+      "categoria","servicio","universidad","carrera",
+      "nombre","whatsappCliente","fechaLimite","descripcion"
+    ];
+
+    for(let id of campos){
+      if(!document.getElementById(id).value.trim()){
+        showToast("Completa todos los campos obligatorios (*).");
+        return;
+      }
+    }
+
+    const mensaje = buildMessage();
+    const url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(mensaje);
+    window.open(url, "_blank");
+
+    showToast("Abriendo WhatsApp...");
+  });
+</script>
+
+</body>
+</html>
